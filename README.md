@@ -2,6 +2,7 @@
 
 [![Powered by MuAPI](https://img.shields.io/badge/Powered%20by-MuAPI-6366f1?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMSAxNHYtNGgtMnYtMmg0djZoLTJ6bTAtOFY2aDJ2MmgtMnoiLz48L3N2Zz4=)](https://muapi.ai?utm_source=github&utm_medium=badge&utm_campaign=open-generative-ai)
 
+> 🍴 **This is [@yunyminaya](https://github.com/yunyminaya)'s personal fork** of the original [Anil-matcha/Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI). All credit for the original project goes to its author and contributors (see [LICENSE](LICENSE)). Changes made in this fork: added a runnable `npm test` script for the existing `node:test` suite, added `.env.example`, and applied non-breaking dependency security patches. See [Releases](https://github.com/yunyminaya/Open-Generative-AI/releases) for this fork's own builds (none published yet — use the upstream installers below in the meantime, or build from source).
 
 > **The free, open-source alternative to AI Video Platforms.** Generate AI images and videos using 400+ state-of-the-art models across 14 studios — no content filters, no closed ecosystem, no subscription fees.
 
@@ -77,7 +78,7 @@ One-click installers — no Node.js or terminal required.
 | Windows (x64) | [Open Generative AI Setup 1.0.9.exe](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.9/Open.Generative.AI.Setup.1.0.9.exe) |
 | Linux (Ubuntu x64) | [v1.0.9 release](https://github.com/Anil-matcha/Open-Generative-AI/releases/tag/v1.0.9) (`.AppImage` / `.deb`), or build locally with `npm run electron:build:linux`. |
 
-All releases: [github.com/Anil-matcha/Open-Generative-AI/releases](https://github.com/Anil-matcha/Open-Generative-AI/releases)
+> The installers above are the upstream project's official builds (this fork hasn't published its own binaries yet). All upstream releases: [github.com/Anil-matcha/Open-Generative-AI/releases](https://github.com/Anil-matcha/Open-Generative-AI/releases)
 
 ### macOS Installation Guide
 
@@ -457,7 +458,7 @@ Pick the entry point that matches your goal:
 
 ```bash
 # Clone the repository (with submodules — required for the workflow + agent packages)
-git clone --recurse-submodules https://github.com/Anil-matcha/Open-Generative-AI.git
+git clone --recurse-submodules https://github.com/yunyminaya/Open-Generative-AI.git
 cd Open-Generative-AI
 
 # If you already cloned without --recurse-submodules, run this once:
@@ -502,7 +503,7 @@ npm run electron:build:linux
 npm run electron:build:all
 ```
 
-Installers are output to the `release/` folder. Pre-built binaries are also available on the [Releases page](https://github.com/Anil-matcha/Open-Generative-AI/releases).
+Installers are output to the `release/` folder. Pre-built binaries for this fork are on its [Releases page](https://github.com/yunyminaya/Open-Generative-AI/releases) (once published); upstream binaries are on the [original project's Releases page](https://github.com/Anil-matcha/Open-Generative-AI/releases).
 
 ## 🏗️ Architecture
 
