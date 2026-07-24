@@ -1,7 +1,12 @@
 {
   "name": "open-generative-ai",
   "description": "Open-source alternative to HF AI — AI image, video, cinema and lip sync studio",
-  "homepage": "https://github.com/Anil-matcha/Open-Generative-AI",
+  "homepage": "https://github.com/yunyminaya/Open-Generative-AI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunyminaya/Open-Generative-AI.git"
+  },
+  "author": "yunyminaya",
   "private": true,
   "version": "2.0.0",
   "license": "MIT",
@@ -16,6 +21,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "node --test tests/**/*.test.js",
     "build:studio": "npm run build -w studio",
     "build:workflow": "npm run build -w workflow-builder",
     "build:agent": "npm run build -w ai-agent",
