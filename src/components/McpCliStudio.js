@@ -33,7 +33,7 @@ export function McpCliStudio() {
         <div class="grid md:grid-cols-3 gap-4">
             ${quickStep('1', 'Install the CLI', 'npm install -g muapi-cli')}
             ${quickStep('2', 'Sign in', 'muapi auth login')}
-            ${quickStep('3', 'Generate from chat', 'npx skills add SamurAIGPT/Generative-Media-Skills')}
+            ${quickStep('3', 'Generate from chat', 'npx skills add SamurAIGPT/muapi-skills')}
         </div>
     `;
     inner.appendChild(quick);
@@ -66,9 +66,9 @@ export function McpCliStudio() {
         tag: 'Skills',
         title: 'Generative Media Skills',
         body: 'Multimodal toolkit for Claude Code, Cursor, and Gemini CLI. Cinema Director, Nano-Banana, UI Designer, Logo Creator, Seedance 2, AI Clipping, and YouTube Shorts presets. Agent-native with JSON outputs and semantic exit codes.',
-        code: 'npx skills add SamurAIGPT/Generative-Media-Skills --all',
-        link: 'https://github.com/SamurAIGPT/Generative-Media-Skills',
-        linkLabel: 'View Generative-Media-Skills on GitHub',
+        code: 'npx skills add SamurAIGPT/muapi-skills --all',
+        link: 'https://github.com/SamurAIGPT/muapi-skills',
+        linkLabel: 'View muapi-skills on GitHub',
         icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.39 4.84L20 8l-4 3.9.94 5.5L12 14.77 7.06 17.4 8 11.9 4 8l5.61-1.16L12 2z"/></svg>`,
     }));
 
@@ -103,7 +103,7 @@ export function McpCliStudio() {
             <div class="flex flex-col gap-1.5 flex-1 w-full">
                 <label class="text-[11px] font-bold tracking-wider uppercase text-secondary">Select Target Model</label>
                 <select id="modelSelector" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30">
-                    <option value="image generate 'a retro-futuristic synthwave car' --model flux-dev">Flux Dev (Image)</option>
+                    <option value="image generate 'a retro-futuristic synthwave car' --model flux-dev">FLUX.1 Dev (Image)</option>
                     <option value="image generate 'oil painting of an astronaut' --model midjourney">Midjourney (Image)</option>
                     <option value="video generate 'cinematic drone shot of an ancient castle' --model kling-master">Kling Master (Video)</option>
                     <option value="video generate 'cyberpunk neon alleyway rain' --model luma-ray">Luma Ray (Video)</option>

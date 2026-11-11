@@ -4,12 +4,13 @@
 
 > 🍴 **This is [@yunyminaya](https://github.com/yunyminaya)'s personal fork** of the original [Anil-matcha/Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI). All credit for the original project goes to its author and contributors (see [LICENSE](LICENSE)). Changes made in this fork: added a runnable `npm test` script for the existing `node:test` suite, added `.env.example`, and applied non-breaking dependency security patches. See [Releases](https://github.com/yunyminaya/Open-Generative-AI/releases) for this fork's own builds (none published yet — use the upstream installers below in the meantime, or build from source).
 
-> **The free, open-source alternative to AI Video Platforms.** Generate AI images and videos using 400+ state-of-the-art models across 14 studios — no content filters, no closed ecosystem, no subscription fees.
+> **The free, open-source alternative to AI Video Platforms.** Generate AI images and videos using 600+ state-of-the-art models across 14 studios — no content filters, no closed ecosystem, no subscription fees.
 
-**Community:** Join [Discord](https://discord.gg/tANKJkHck) for discussions and support
+**Community:** Join [Discord](https://discord.com/invite/zpnuBRXhKg) for discussions and support
 
-<p align="center"><a href="https://youtu.be/Uszlw7H4VP4"><img src="https://i.ytimg.com/vi/Uszlw7H4VP4/maxresdefault.jpg" width="720"></a></p>
-<p align="center"><a href="https://youtu.be/Uszlw7H4VP4"><b>▶ Watch: How to Get Exclusive Access to Seedance 2.5 API (Step-by-Step Guide) </b></a></p>
+
+<p align="center"><a href="https://youtu.be/DiiO9Mhdy7M"><img src="https://i.ytimg.com/vi/DiiO9Mhdy7M/maxresdefault.jpg" width="720"></a></p>
+<p align="center"><a href="https://youtu.be/DiiO9Mhdy7M"><b>▶ Watch: MiniMax H3 Image API Guide: Uncensored, Spicy Mode, Text-to-Image, Edit & Highspeed </b></a></p>
 
 <p align="center">
   <a href="https://github.com/Anil-matcha/awesome-generative-ai-apps">
@@ -18,6 +19,8 @@
 </p>
 
 > 🎨 **[Explore 50+ more open-source AI apps →](https://github.com/Anil-matcha/awesome-generative-ai-apps)**
+
+> 🤝 **New: [Open Duet](https://github.com/Anil-matcha/open-duet)** — open-source, self-hosted AI coworkers (named agents) with instructions, memory, routines, their own isolated computer, and your approval before they act. An alternative to Claude Duet, OpenAI Dots, and Manus Cue. [Star it on GitHub →](https://github.com/Anil-matcha/open-duet)
 
 ## 💰 Turn This Into Your Own Product — White Label & Resell
 
@@ -46,46 +49,28 @@ Consumer AI image/video platforms almost all run on paid monthly subscriptions �
 
 ---
 
+## API examples and model references
+
+- [OpenAI API examples](https://github.com/Anil-matcha/OpenAI-API) — GPT Image, Sora, and GPT endpoints through Muapi.
+- [Google Gemini Media API examples](https://github.com/Anil-matcha/Google-Gemini-Media-API) — Nano Banana, Imagen, Veo, Gemini Omni, and speech endpoints.
+- [MiniMax Media API examples](https://github.com/Anil-matcha/MiniMax-Media-API) — Hailuo, H3 Max, speech, and music workflows.
+- [Kling Video API examples](https://github.com/Anil-matcha/Kling-Video-API) — Kling text-to-video, image-to-video, and motion control.
+- [Qwen Image API examples](https://github.com/Anil-matcha/Qwen-Image-API) — Qwen image generation, editing, and LoRA workflows through Muapi.
+
 ## Related Projects
 
-> 🎞️ **MiniMax H3 API Python SDK:** [MiniMax-H3-API](https://github.com/Anil-matcha/MiniMax-H3-API) — Python SDK for MiniMax H3 text-to-video, image-to-video, and first/last-frame video workflows through Muapi.
+This is a curated set of high-value hubs, popular distribution tools, and model-specific integrations rather than a directory of every related repository.
 
-> 📝 **MiniMax H3 prompt gallery:** [awesome-minimax-h3-prompts](https://github.com/Anil-matcha/awesome-minimax-h3-prompts) — runnable MuAPI examples and creator-ready prompt references for MiniMax H3 video generation.
-
-> 🌊 **Wan 3.0 API Python SDK:** [Wan-3.0-API](https://github.com/Anil-matcha/Wan-3.0-API) — Python SDK and MCP server for Wan 3.0-compatible text-to-video, image-to-video, multimodal references, uploads, and asynchronous generation jobs.
-
-> 🆕 **FLUX 3 Python SDK:** [Flux-3-Dev-API](https://github.com/Anil-matcha/Flux-3-Dev-API) — Python wrapper for Black Forest Labs' newly announced FLUX 3 — text-to-image, image-to-image, text-to-video, and image-to-video through one client, including the fast/low-cost Dev variant.
-
-> 🎬 **FLUX 3 video, specifically:** [flux-3-video-api](https://github.com/SamurAIGPT/flux-3-video-api) — a focused Python wrapper for just the FLUX 3 Text-to-Video and Image-to-Video endpoints, with native synchronized audio.
-
-> 🎓 **Learn to monetize generative AI:** [ai-creator-academy](https://github.com/Anil-matcha/ai-creator-academy) — a free, open-source curriculum teaching creators, freelancers, and agencies how to make money with generative AI image/video/audio tools, covering monetization, pricing, and client delivery — not just how the models work.
-
-> 🤖 **Automate media generations with AI coding agents:** [Generative-Media-Skills](https://github.com/SamurAIGPT/Generative-Media-Skills) — a library of skills that let agents like **Claude Code**, **Codex**, and other coding assistants drive 200+ image/video models end-to-end (prompt → generate → edit → stitch) directly from your terminal. Perfect for building automated media pipelines without touching a UI.
-
-> 🎬 **Seedance 2.5 prompts & API guide:** [awesome-seedance-2.5-api-prompts](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts) — Curated prompt templates, camera control vocabulary, MuAPI reference, and cinematic examples for Seedance 2.5 video generation.
-
-> 🎥 **Seedance 2.5 Python SDK:** [Seedance-2.5-API](https://github.com/SamurAIGPT/Seedance-2.5-API) — Python wrapper for ByteDance's Seedance 2.5 API — text-to-video, image-to-video, realistic human faces, character consistency.
-
-> 🧩 **Seedance 2.5 ComfyUI pack:** [seedance2.5-comfyui](https://github.com/Anil-matcha/seedance2.5-comfyui) — native ComfyUI nodes and example workflows for the same MuAPI video model.
-
-> 🤖 **Seedance MCP servers:** [seedance-2-mcp](https://github.com/Anil-matcha/seedance-2-mcp) and [seedance-2.5-mcp](https://github.com/Anil-matcha/seedance-2.5-mcp) — focused MCP tools for driving Seedance 2 and Seedance 2.5 from Claude, Cursor, and other AI assistants.
-
-> 🍌 **Claude Fable 5 use cases + 20% off on MuAPI:** [awesome-claude-fable-5](https://github.com/Anil-matcha/awesome-claude-fable-5) — 60 curated real-world use cases, prompts, and benchmarks for Claude Fable 5, with **20% off Fable 5 access** via [MuAPI](https://muapi.ai/pricing?utm_source=github&utm_medium=readme&utm_campaign=open-generative-ai).
-
-- [AI-Youtube-Shorts-Generator](https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator) — Auto-generate viral YouTube Shorts from long-form videos using AI
-- [muapi-cli](https://github.com/SamurAIGPT/muapi-cli) — Official CLI for MuAPI — run these models from your terminal
-- [Vibe-Workflow](https://github.com/SamurAIGPT/Vibe-Workflow) — Node-based AI workflow builder for generative image & video pipelines
-- [Text-To-Video-AI](https://github.com/SamurAIGPT/Text-To-Video-AI) — Lightweight text-to-video script — no UI required
-- [muapi-comfyui](https://github.com/SamurAIGPT/muapi-comfyui) — ComfyUI nodes for 100+ MuAPI models
-- [n8n-nodes-muapi](https://github.com/SamurAIGPT/n8n-nodes-muapi) — n8n community nodes for MuAPI — automate media generation
-- [Open-AI-Design-Agent](https://github.com/Anil-matcha/Open-AI-Design-Agent) — Open-source autonomous AI design agent
-- [Free-AI-Social-Media-Scheduler](https://github.com/Anil-matcha/Free-AI-Social-Media-Scheduler) — Free open-source AI social media scheduler — self-hostable alternative to Buffer and Hootsuite
-- [awesome-seedance-2.5-api-prompts](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts) — Curated Seedance 2.5 API guide, prompts, camera controls, and video generation examples
-- [AI-Voice-Agent](https://github.com/Anil-matcha/AI-Voice-Agent) — Self-hosted AI voice agent for real-time voice conversations, sales calls, and customer support
-- [awesome-ai-video-models](https://github.com/Anil-matcha/awesome-ai-video-models) — compare AI video models by API, price & speed
-- [awesome-ai-image-models](https://github.com/Anil-matcha/awesome-ai-image-models) — compare AI image models by API, price & quality
-- [awesome-flux-3-api-prompts](https://github.com/Anil-matcha/awesome-flux-3-api-prompts) — FLUX 3 API guide, prompts, and parameters
-- [wan-3.0-comfyui](https://github.com/Anil-matcha/wan-3.0-comfyui) — ComfyUI custom nodes for Wan 3.0 text-to-image, image edit, text-to-video, and image-to-video via MuAPI.
+- [awesome-vibecoded-saas](https://github.com/Anil-matcha/awesome-vibecoded-saas) — broader catalog of open-source SaaS alternatives featuring this studio.
+- [Muapi open-source alternatives](https://muapi.ai/open-source/alternative/midjourney) — compare this studio with the Midjourney workflow and its honest scope.
+- [awesome-generative-ai-apps](https://github.com/Anil-matcha/awesome-generative-ai-apps) — catalog of open-source generative-AI applications.
+- [awesome-ai-video-models](https://github.com/Anil-matcha/awesome-ai-video-models) — compare video models by API, price, and capability.
+- [awesome-ai-image-models](https://github.com/Anil-matcha/awesome-ai-image-models) — compare image models by API, price, and quality.
+- [AI-Youtube-Shorts-Generator](https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator) — Open-source Opus Clip alternative application.
+- [open-duet](https://github.com/Anil-matcha/open-duet) — Open-source, self-hosted AI coworkers with memory, routines, isolated computers, and approval-gated actions.
+- [Open-AI-Design-Agent](https://github.com/Anil-matcha/Open-AI-Design-Agent) — Ppen-source autonomous AI design agent.
+- [muapi-skills](https://github.com/SamurAIGPT/muapi-skills) — Agent-ready skills for driving generative-media workflows.
+- [Seedance-2.5-API](https://github.com/SamurAIGPT/Seedance-2.5-API) — Python SDK for Seedance 2.5 video generation.
 
 ## 🌐 Try it Online — No Install Required
 
@@ -103,10 +88,10 @@ One-click installers — no Node.js or terminal required.
 
 | Platform | Download |
 |---|---|
-| macOS Apple Silicon (M1/M2/M3/M4) | [Open Generative AI-1.0.9-arm64.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.9/Open.Generative.AI-1.0.9-arm64.dmg) |
-| macOS Intel (x64) | [Open Generative AI-1.0.9.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.9/Open.Generative.AI-1.0.9.dmg) |
-| Windows (x64) | [Open Generative AI Setup 1.0.9.exe](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v1.0.9/Open.Generative.AI.Setup.1.0.9.exe) |
-| Linux (Ubuntu x64) | [v1.0.9 release](https://github.com/Anil-matcha/Open-Generative-AI/releases/tag/v1.0.9) (`.AppImage` / `.deb`), or build locally with `npm run electron:build:linux`. |
+| macOS Apple Silicon (M1/M2/M3/M4) | [Open Generative AI-2.0.0-arm64.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v2.0.0/Open.Generative.AI-2.0.0-arm64.dmg) |
+| macOS Intel (x64) | [Open Generative AI-2.0.0.dmg](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v2.0.0/Open.Generative.AI-2.0.0.dmg) |
+| Windows (x64) | [Open Generative AI Setup 2.0.0.exe](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v2.0.0/Open.Generative.AI.Setup.2.0.0.exe) |
+| Linux (Ubuntu x64) | [`.AppImage`](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v2.0.0/Open.Generative.AI-2.0.0.AppImage) / [`.deb`](https://github.com/Anil-matcha/Open-Generative-AI/releases/download/v2.0.0/open-generative-ai_2.0.0_amd64.deb), or build locally with `npm run electron:build:linux`. |
 
 > The installers above are the upstream project's official builds (this fork hasn't published its own binaries yet). All upstream releases: [github.com/Anil-matcha/Open-Generative-AI/releases](https://github.com/Anil-matcha/Open-Generative-AI/releases)
 
@@ -204,7 +189,7 @@ The desktop app supports **two independent local engines**. Pick whichever fits 
 | Engine | What it is | Best for |
 |---|---|---|
 | **sd.cpp** (bundled) | C++ engine from [stable-diffusion.cpp](https://github.com/leejet/stable-diffusion.cpp), runs on the same machine as the app. Metal GPU on Apple Silicon, CUDA/Vulkan/ROCm on Linux/Windows. | Image-only models. Works on Mac M-series. |
-| **Wan2GP** (BYO server) | HTTP client to a user-run [Wan2GP](https://github.com/deepbeepmeep/Wan2GP) server. The server runs Python + PyTorch on a CUDA/ROCm GPU; the desktop app only sends prompts and receives results. | Video models (Wan 2.2, Hunyuan, LTX) and large image models (Flux, Qwen-Image). NVIDIA/AMD GPU required on the *server*; the desktop app itself can run on a Mac. |
+| **Wan2GP** (BYO install) | A user-installed [Wan2GP](https://github.com/deepbeepmeep/Wan2GP): either its folder on this machine (the app runs `wgp.py` itself) or its MCP server on another machine. Python + PyTorch on a CUDA/ROCm GPU. | Video models (Wan 2.1/2.2, Hunyuan, LTX-2) in **Video Studio** and large image models (Flux, Qwen-Image). NVIDIA/AMD GPU required on the Wan2GP machine; the desktop app itself can run on a Mac. |
 
 Both engines share the same UI: open **Settings → Local Models** to configure each.
 
@@ -244,29 +229,38 @@ inside that directory, and **Settings -> Local Models** shows the resolved model
 Local engine output and download errors are written to the app process console, so launch
 from Terminal or PowerShell when you need troubleshooting logs.
 
-### Engine 2 — Wan2GP (remote Gradio server)
+### Engine 2 — Wan2GP (your own install)
 
-The app does **not** bundle Python or model weights for Wan2GP. You run Wan2GP yourself on a machine with a CUDA or ROCm GPU and point the desktop app at its URL.
+The app does **not** bundle Python or model weights for Wan2GP. Install Wan2GP yourself on a machine with a CUDA or ROCm GPU:
 
 ```bash
-# On your GPU machine
 git clone https://github.com/deepbeepmeep/Wan2GP
 cd Wan2GP
 ./install.sh                          # or install.bat on Windows
-python wgp.py --listen --server-name 0.0.0.0   # binds to all interfaces
 ```
 
-Then in the desktop app: **Settings → Local Models → Wan2GP server**, paste the URL (e.g. `http://192.168.1.42:7860`), click **Test**, then **Save**. The Wan2GP models become available — image models in **Image Studio**, video models reachable via the same generation API (Image Studio rejects video output explicitly; full Video Studio wiring is on the roadmap).
+**Same machine (recommended).** In the desktop app open **Settings → Local Models → Wan2GP**, set the Wan2GP folder (Python defaults to `<folder>/venv/bin/python`), click **Save**, then **Check** — it runs `wgp.py --dry-run` on a test task. Each generation runs Wan2GP's headless CLI (`wgp.py --process settings.json`); weights download automatically the first time a model is used, and the download shows up in the progress bar.
 
-| Model | Type | Notes |
-|---|---|---|
-| **Flux.1 Dev** | Image | 1024px, 28 steps |
-| **Qwen Image** | Image | 1024px, 30 steps |
-| **Wan 2.2 (T2V / I2V)** | Video | Slow on consumer GPUs |
-| **Hunyuan Video** | Video | High-quality T2V |
-| **LTX Video** | Video | Fastest video option |
+**Another machine.** Start WanGP's MCP server there and put its URL (e.g. `http://192.168.1.42:7866/mcp`) in the same settings panel:
 
-> **Why a separate server?** Wan2GP's runtime (Sage attention, flash-attn, AWQ/GGUF kernels) is CUDA-only — there is no MPS / Apple Silicon path. Treating it as a remote server lets a Mac-only user keep the desktop app while offloading inference to a Linux/Windows GPU box, a gaming PC on the LAN, or a rented RunPod/vast.ai instance.
+```bash
+python wgp.py --mcp --mcp-api-version 1 --mcp-transport streamable-http --mcp-host 0.0.0.0 --mcp-port 7866
+```
+
+Use `--mcp-host 0.0.0.0` only on a trusted network (see Wan2GP's `docs/AUTHENTICATION.md` for OAuth/HTTPS). The Gradio web UI port (7860) is **not** an API and cannot be used here.
+
+Then switch **Video Studio** to **⚡ Local** and pick a model. Models your Wan2GP version doesn't have are listed with the reason; models whose weights aren't downloaded yet are marked.
+
+| Model | WanGP `model_type` | Type | Notes |
+|---|---|---|---|
+| **Wan 2.1 1.3B** | `t2v_1.3B` | Video | Lightest option, 480p, ~8 GB VRAM |
+| **Wan 2.2 14B T2V / I2V** | `t2v_2_2` / `i2v_2_2` | Video | 480p, slow on consumer GPUs; I2V needs a start frame |
+| **Hunyuan Video 1.5** | `hunyuan_1_5_480_t2v` | Video | 480p T2V |
+| **LTX-2 Distilled** | `ltx2_22B_distilled` | Video | 8 steps, 720p |
+| **Flux.1 Dev** | `flux` | Image | Image Studio |
+| **Qwen Image** | `qwen_image_20B` | Image | Image Studio |
+
+> **Why the remote option?** Wan2GP's runtime (Sage attention, flash-attn, AWQ/GGUF kernels) is CUDA/ROCm-only — there is no MPS / Apple Silicon path. The MCP server lets a Mac-only user keep the desktop app while offloading inference to a Linux/Windows GPU box, a gaming PC on the LAN, or a rented RunPod/vast.ai instance.
 
 > **Local inference is only available in the desktop app.** The hosted web version always uses cloud APIs.
 
@@ -308,7 +302,7 @@ A healthy run on Apple Silicon prints `total params memory size = 1969.78MB (VRA
 ## ✨ Features
 
 - **Image Studio** — Generate images from text prompts (50+ text-to-image models) or transform existing images (55+ image-to-image models). Switches model set automatically based on whether a reference image is provided. Quality and resolution controls visible for models that support them.
-- **Local Inference** — Two engines: **sd.cpp** (bundled, runs on Mac/Win/Linux with Metal/CUDA/Vulkan/ROCm) for SD 1.5, SDXL, and Z-Image; and **Wan2GP** (BYO Gradio server) for Flux, Qwen-Image, and video models (Wan 2.2, Hunyuan, LTX). Configure both in Settings → Local Models.
+- **Local Inference** — Two engines: **sd.cpp** (bundled, runs on Mac/Win/Linux with Metal/CUDA/Vulkan/ROCm) for SD 1.5, SDXL, and Z-Image; and **Wan2GP** (your own install — local folder or remote MCP server) for Flux, Qwen-Image, and video models in Video Studio (Wan 2.1/2.2, Hunyuan, LTX-2). Configure both in Settings → Local Models.
 - **Multi-Image Input** — Upload up to 14 reference images for compatible edit models (Nano Banana 2 Edit, Flux Kontext Dev, GPT-4o Edit, and more). Multi-select picker with order badges, batch upload, and a "Use Selected" confirmation flow.
 - **Video Studio** — Generate videos from text prompts (40+ text-to-video models) or animate a start-frame image (60+ image-to-video models). Same intelligent mode switching as Image Studio.
 - **Audio Studio** — Generate and edit AI audio/music from text prompts.

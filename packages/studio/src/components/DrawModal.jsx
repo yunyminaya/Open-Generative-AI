@@ -55,6 +55,10 @@ export default function DrawModal({
 
   const fileInputRef = useRef(null);
   const insertImageInputRef = useRef(null);
+  const [isBgDragging, setIsBgDragging] = useState(false);
+  const bgDragCounterRef = useRef(0);
+  const [isOverlayDragging, setIsOverlayDragging] = useState(false);
+  const overlayDragCounterRef = useRef(0);
   const modelDropdownRef = useRef(null);
   const arDropdownRef = useRef(null);
 
@@ -780,8 +784,11 @@ export default function DrawModal({
   }, [brushSize]);
 
   // Upload background file
-  const handleUploadBg = (e) => {
-    const file = e.target.files?.[0];
+  const handleUploadBg = (filesOrEvent) => {
+    const files = Array.isArray(filesOrEvent)
+      ? filesOrEvent
+      : Array.from(filesOrEvent?.target?.files || []);
+    const file = files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -792,13 +799,52 @@ export default function DrawModal({
     reader.readAsDataURL(file);
   };
 
+  // Drag-and-drop handlers for the background upload dropzone
+  const handleBgDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    bgDragCounterRef.current += 1;
+    if (e.dataTransfer?.items && e.dataTransfer.items.length > 0) {
+      setIsBgDragging(true);
+    }
+  };
+
+  const handleBgDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    bgDragCounterRef.current -= 1;
+    if (bgDragCounterRef.current <= 0) {
+      bgDragCounterRef.current = 0;
+      setIsBgDragging(false);
+    }
+  };
+
+  const handleBgDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleBgDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    bgDragCounterRef.current = 0;
+    setIsBgDragging(false);
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleUploadBg(Array.from(files));
+    }
+  };
+
   // Insert Overlay image
   const handleInsertImageClick = () => {
     insertImageInputRef.current?.click();
   };
 
-  const handleInsertImage = (e) => {
-    const file = e.target.files?.[0];
+  const handleInsertImage = (filesOrEvent) => {
+    const files = Array.isArray(filesOrEvent)
+      ? filesOrEvent
+      : Array.from(filesOrEvent?.target?.files || []);
+    const file = files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -833,6 +879,42 @@ export default function DrawModal({
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
+  };
+
+  // Drag-and-drop handlers for the insert-overlay-image tool
+  const handleOverlayDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    overlayDragCounterRef.current += 1;
+    if (e.dataTransfer?.items && e.dataTransfer.items.length > 0) {
+      setIsOverlayDragging(true);
+    }
+  };
+
+  const handleOverlayDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    overlayDragCounterRef.current -= 1;
+    if (overlayDragCounterRef.current <= 0) {
+      overlayDragCounterRef.current = 0;
+      setIsOverlayDragging(false);
+    }
+  };
+
+  const handleOverlayDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleOverlayDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    overlayDragCounterRef.current = 0;
+    setIsOverlayDragging(false);
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleInsertImage(Array.from(files));
+    }
   };
 
   // Clear Canvas (Remove image, drawings, text overlays and reset to setup screen)
@@ -952,7 +1034,7 @@ export default function DrawModal({
           const entry = {
             id: res.id || Math.random().toString(36).substring(7),
             url: res.url,
-            prompt: `Draw to Edit with ${selectedModel === "nano-banana-pro-edit" ? "Nano Banana Pro Edit" : "Nano Banana 2 Edit"}`,
+            prompt: `Draw to Edit with ${selectedModel === "nano-banana-pro-edit" ? "Nano Banana Pro" : "Nano Banana 2"}`,
             model: selectedModel,
             aspect_ratio: aspectRatio === "Auto" ? "1:1" : aspectRatio,
             timestamp: new Date().toISOString(),
@@ -1042,7 +1124,17 @@ export default function DrawModal({
         <div className="flex-1 flex flex-col items-center justify-center p-6 overflow-y-auto custom-scrollbar relative bg-[#070708]/30">
           {viewState === "setup" ? (
             /* Setup Card */
-            <div className="border-2 border-dashed border-white/10 rounded-2xl p-8 max-w-md w-full text-center flex flex-col items-center gap-6 bg-[#070708]/50">
+            <div
+              onDragEnter={handleBgDragEnter}
+              onDragLeave={handleBgDragLeave}
+              onDragOver={handleBgDragOver}
+              onDrop={handleBgDrop}
+              className={`border-2 border-dashed rounded-2xl p-8 max-w-md w-full text-center flex flex-col items-center gap-6 bg-[#070708]/50 transition-colors ${
+                isBgDragging
+                  ? "border-[#b5f500] bg-[#b5f500]/5"
+                  : "border-white/10"
+              }`}
+            >
               <div className="w-56 h-36 rounded-xl border border-white/5 overflow-hidden shadow-lg select-none relative bg-black/40">
                 <img
                   src="https://d3adwkbyhxyrtq.cloudfront.net/webassets/videomodels/neta-lumina.avif"
@@ -1469,9 +1561,15 @@ export default function DrawModal({
                 {/* Insert Overlay Image Tool */}
                 <button
                   onClick={handleInsertImageClick}
-                  title="Insert overlay image"
+                  onDragEnter={handleOverlayDragEnter}
+                  onDragLeave={handleOverlayDragLeave}
+                  onDragOver={handleOverlayDragOver}
+                  onDrop={handleOverlayDrop}
+                  title="Insert overlay image (or drop an image here)"
                   className={`p-1.5 rounded-lg transition-all ${
-                    activeTool === "image"
+                    isOverlayDragging
+                      ? "bg-[#b5f500] text-black ring-2 ring-[#b5f500]"
+                      : activeTool === "image"
                       ? "bg-white text-black"
                       : "text-white/60 hover:text-white"
                   }`}
@@ -1569,7 +1667,6 @@ export default function DrawModal({
                   ) : (
                     <>
                       Generate Image
-                      <span className="opacity-80">✦ {batchSize}</span>
                     </>
                   )}
                 </button>
@@ -1592,8 +1689,8 @@ export default function DrawModal({
                     G
                   </span>
                   {selectedModel === "nano-banana-pro-edit"
-                    ? "Nano Banana Pro Edit"
-                    : "Nano Banana 2 Edit"}
+                    ? "Nano Banana Pro"
+                    : "Nano Banana 2"}
                   <span className="opacity-45 text-[8px] ml-0.5">▼</span>
                 </button>
 
@@ -1615,7 +1712,7 @@ export default function DrawModal({
                       }`}
                     >
                       <div className="text-xs font-bold flex items-center gap-1.5">
-                        Nano Banana 2 Edit
+                        Nano Banana 2
                         {selectedModel === "nano-banana-2-edit" && (
                           <span className="text-[#b5f500]">✓</span>
                         )}
@@ -1637,7 +1734,7 @@ export default function DrawModal({
                       }`}
                     >
                       <div className="text-xs font-bold flex items-center gap-1.5">
-                        Nano Banana Pro Edit
+                        Nano Banana Pro
                         {selectedModel === "nano-banana-pro-edit" && (
                           <span className="text-[#b5f500]">✓</span>
                         )}

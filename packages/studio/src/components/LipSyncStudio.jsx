@@ -33,6 +33,9 @@ import {
   promptControlClassName,
   promptMediaButtonClassName,
 } from "./prompt/PromptComposer.jsx";
+import en from "../messages/en/lipSyncStudio.json";
+import zh from "../messages/zh/lipSyncStudio.json";
+import { resolveCopy } from "../i18nUtils";
 
 // ---------------------------------------------------------------------------
 // Upload button states
@@ -41,6 +44,27 @@ const UPLOAD_STATE = {
   IDLE: "idle",
   UPLOADING: "uploading",
   READY: "ready",
+};
+
+const isAudioFile = (file) => {
+  if (!file) return false;
+  if (file.type && file.type.startsWith("audio/")) return true;
+  const ext = file.name?.split(".").pop()?.toLowerCase();
+  return ["mp3", "wav", "ogg", "m4a", "aac", "flac", "wma"].includes(ext);
+};
+
+const isImageFile = (file) => {
+  if (!file) return false;
+  if (file.type && file.type.startsWith("image/")) return true;
+  const ext = file.name?.split(".").pop()?.toLowerCase();
+  return ["jpg", "jpeg", "png", "webp", "avif", "gif", "bmp"].includes(ext);
+};
+
+const isVideoFile = (file) => {
+  if (!file) return false;
+  if (file.type && file.type.startsWith("video/")) return true;
+  const ext = file.name?.split(".").pop()?.toLowerCase();
+  return ["mp4", "mov", "webm", "mkv", "avi"].includes(ext);
 };
 
 function MediaPickerButton({
@@ -54,13 +78,44 @@ function MediaPickerButton({
   fileName,
   previewUrl,
   isVideo,
+  isAudio,
   apiKey,
+  mediaCopy = en.media,
 }) {
   const inputRef = useRef(null);
+  const audioRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const dragCounterRef = useRef(0);
+  const acceptPrefix = accept?.split("/")[0];
+
+  useEffect(() => {
+    if (uploadState !== UPLOAD_STATE.READY) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setIsPlaying(false);
+    }
+  }, [uploadState, previewUrl]);
+
+  const togglePlayAudio = (e) => {
+    e.stopPropagation();
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(console.warn);
+    }
+  };
 
   const handleClick = (e) => {
     e.stopPropagation();
     if (uploadState === UPLOAD_STATE.READY) {
+      if (isAudio) {
+        togglePlayAudio(e);
+        return;
+      }
       onClear();
       return;
     }
@@ -68,103 +123,212 @@ function MediaPickerButton({
   };
 
   const handleChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const fileList = Array.from(files);
     e.target.value = "";
-    await onUpload(file);
+    await onUpload(fileList);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current += 1;
+    if (e.dataTransfer?.items && e.dataTransfer.items.length > 0) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current -= 1;
+    if (dragCounterRef.current <= 0) {
+      dragCounterRef.current = 0;
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const isAcceptedFile = (file) => {
+    if (!file) return false;
+    if (acceptPrefix === "audio") return isAudioFile(file);
+    if (acceptPrefix === "image") return isImageFile(file);
+    if (acceptPrefix === "video") return isVideoFile(file);
+    return true;
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounterRef.current = 0;
+    setIsDragging(false);
+    if (uploadState === UPLOAD_STATE.UPLOADING) return;
+    const files = Array.from(e.dataTransfer?.files || []).filter(isAcceptedFile);
+    if (files.length === 0) return;
+    await onUpload(files);
   };
 
   return (
-    <button
-      type="button"
-      title={
-        uploadState === UPLOAD_STATE.READY
-          ? `${fileName} — click to clear`
-          : `Upload ${label.toLowerCase()} file`
-      }
-      onClick={handleClick}
-      className={promptMediaButtonClassName({
-        active: uploadState === UPLOAD_STATE.READY,
-      })}
-    >
+    <div className="relative inline-flex group/media">
       <input
         ref={inputRef}
         type="file"
         accept={accept}
         className="hidden"
+        onClick={(e) => e.stopPropagation()}
         onChange={handleChange}
       />
+      <button
+        type="button"
+        title={
+          uploadState === UPLOAD_STATE.READY
+            ? isAudio
+              ? `${fileName} — ${isPlaying ? "Pause" : "Play"}`
+              : `${fileName} — ${mediaCopy.clickToClear}`
+            : `${mediaCopy.uploadFilePrefix} ${label} ${mediaCopy.uploadFileSuffix}`
+        }
+        onClick={handleClick}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        className={promptMediaButtonClassName({
+          active: uploadState === UPLOAD_STATE.READY,
+          className: isDragging
+            ? "ring-2 ring-[#22d3ee] ring-offset-1 ring-offset-black scale-105"
+            : "",
+        })}
+      >
+        {/* Idle state */}
+        {uploadState === UPLOAD_STATE.IDLE && (
+          <div className="flex flex-col items-center justify-center gap-1 w-full h-full">
+            {icon}
+          </div>
+        )}
 
-      {/* Idle state */}
-      {uploadState === UPLOAD_STATE.IDLE && (
-        <div className="flex flex-col items-center justify-center gap-1 w-full h-full">
-          {icon}
-        </div>
-      )}
-
-      {/* Uploading indicator */}
-      {uploadState === UPLOAD_STATE.UPLOADING && (
-        <div className="flex flex-col items-center justify-center w-full h-full absolute inset-0 bg-black/80 z-20 backdrop-blur-[2px]">
-          <svg className="w-8 h-8 -rotate-90">
-            <circle
-              cx="16"
-              cy="16"
-              r="14"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="transparent"
-              className="text-white/10"
-            />
-            <circle
-              cx="16"
-              cy="16"
-              r="14"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="transparent"
-              strokeDasharray={88}
-              strokeDashoffset={88 - (88 * progress) / 100}
-              className="text-primary transition-all duration-300"
-            />
-          </svg>
-          <span className="absolute text-[9px] font-black text-primary leading-none">
-            {progress}%
-          </span>
-        </div>
-      )}
-
-      {/* Ready state */}
-      {uploadState === UPLOAD_STATE.READY && (
-        <div className="flex flex-col items-center justify-center gap-1 w-full h-full absolute inset-0 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-all">
-          {previewUrl ? (
-            isVideo ? (
-              <video
-                src={previewUrl}
-                className="w-full h-full object-cover"
-                muted
+        {/* Uploading indicator */}
+        {uploadState === UPLOAD_STATE.UPLOADING && (
+          <div className="flex flex-col items-center justify-center w-full h-full absolute inset-0 bg-black/80 z-20 backdrop-blur-[2px]">
+            <svg className="w-8 h-8 -rotate-90">
+              <circle
+                cx="16"
+                cy="16"
+                r="14"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="transparent"
+                className="text-white/10"
               />
+              <circle
+                cx="16"
+                cy="16"
+                r="14"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="transparent"
+                strokeDasharray={88}
+                strokeDashoffset={88 - (88 * progress) / 100}
+                className="text-primary transition-all duration-300"
+              />
+            </svg>
+            <span className="absolute text-[9px] font-black text-primary leading-none">
+              {progress}%
+            </span>
+          </div>
+        )}
+
+        {/* Ready state */}
+        {uploadState === UPLOAD_STATE.READY && (
+          <div className="flex flex-col items-center justify-center gap-1 w-full h-full absolute inset-0 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-all">
+            {isAudio ? (
+              <div className="flex flex-col items-center justify-center w-full h-full text-primary">
+                {previewUrl && (
+                  <audio
+                    ref={audioRef}
+                    src={previewUrl}
+                    onEnded={() => setIsPlaying(false)}
+                    onPause={() => setIsPlaying(false)}
+                    onPlay={() => setIsPlaying(true)}
+                  />
+                )}
+                {isPlaying ? (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="text-primary animate-pulse"
+                  >
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="text-primary translate-x-0.5"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                )}
+              </div>
+            ) : previewUrl ? (
+              isVideo ? (
+                <video
+                  src={previewUrl}
+                  className="w-full h-full object-cover"
+                  muted
+                />
+              ) : (
+                <img
+                  src={previewUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              )
             ) : (
-              <img
-                src={previewUrl}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            )
-          ) : (
-            <div className="flex flex-col items-center justify-center w-full px-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary mb-0.5">
-                <path d="M9 18V5l12-2v13" />
-                <circle cx="6" cy="18" r="3" />
-                <circle cx="18" cy="16" r="3" />
-              </svg>
-              <span className="text-[7px] font-black text-primary uppercase truncate w-full text-center">
-                {fileName?.split('.').pop() || "AUD"}
-              </span>
-            </div>
-          )}
-        </div>
+              <div className="flex flex-col items-center justify-center w-full px-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary mb-0.5">
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
+                <span className="text-[7px] font-black text-primary uppercase truncate w-full text-center">
+                  {fileName?.split('.').pop() || "AUD"}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+      </button>
+
+      {/* Clear badge button on top corner for uploaded media */}
+      {uploadState === UPLOAD_STATE.READY && (
+        <button
+          type="button"
+          title={mediaCopy.clickToClear || "Clear"}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            setIsPlaying(false);
+            onClear();
+          }}
+          className="absolute -top-1 -right-1 w-4 h-4 bg-black/80 hover:bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] border border-white/20 transition-all z-20 shadow-md group-hover/media:opacity-100 opacity-80 sm:opacity-0 sm:group-hover/media:opacity-100"
+        >
+          ×
+        </button>
       )}
-    </button>
+    </div>
   );
 }
 
@@ -326,7 +490,9 @@ export default function LipSyncStudio({
   historyItems,
   droppedFiles,
   onFilesHandled,
+  locale = "en",
 }) {
+  const copy = resolveCopy(en, zh, locale);
   const LEGACY_PERSIST_KEY = "hg_lipsync_studio_persistent";
   const PERSIST_KEY = scopedPersistKey(LEGACY_PERSIST_KEY, apiKey);
   useEffect(() => {
@@ -391,6 +557,7 @@ export default function LipSyncStudio({
 
   // ── Persistence: Load ────────────────────────────────────────────────────
   useEffect(() => {
+    hasRestored.current = false;
     try {
       const stored = localStorage.getItem(PERSIST_KEY);
       if (stored) {
@@ -421,10 +588,11 @@ export default function LipSyncStudio({
     } finally {
       hasRestored.current = true;
     }
-  }, []);
+  }, [PERSIST_KEY]);
 
   // ── Persistence: Save ────────────────────────────────────────────────────
   useEffect(() => {
+    if (!hasRestored.current) return;
     const timer = setTimeout(() => {
       try {
         const state = {
@@ -447,6 +615,7 @@ export default function LipSyncStudio({
     }, 500); // 500ms debounce
     return () => clearTimeout(timer);
   }, [
+    PERSIST_KEY,
     inputMode,
     selectedModelId,
     selectedResolution,
@@ -479,9 +648,11 @@ export default function LipSyncStudio({
 
   // ── Upload handlers ─────────────────────────────────────────────────────
   const handleImageUpload = useCallback(
-    async (file) => {
+    async (files) => {
+      const file = Array.isArray(files) ? files[0] : files;
+      if (!file) return;
       if (file.size > 10 * 1024 * 1024) {
-        alert("Image exceeds 10MB limit.");
+        toast.error(copy.errors.imageTooLarge);
         return;
       }
       setImageState(UPLOAD_STATE.UPLOADING);
@@ -495,18 +666,20 @@ export default function LipSyncStudio({
         setImageState(UPLOAD_STATE.READY);
       } catch (err) {
         setImageState(UPLOAD_STATE.IDLE);
-        alert(`Image upload failed: ${err.message}`);
+        toast.error(copy.errors.imageUploadFailed.replace("{message}", err.message));
       } finally {
         setImageProgress(0);
       }
     },
-    [apiKey],
+    [apiKey, copy],
   );
 
   const handleVideoPick = useCallback(
-    async (file) => {
+    async (files) => {
+      const file = Array.isArray(files) ? files[0] : files;
+      if (!file) return;
       if (file.size > 50 * 1024 * 1024) {
-        alert("Video exceeds 50MB limit.");
+        toast.error(copy.errors.videoTooLarge);
         return;
       }
       setVideoState(UPLOAD_STATE.UPLOADING);
@@ -520,12 +693,12 @@ export default function LipSyncStudio({
         setVideoState(UPLOAD_STATE.READY);
       } catch (err) {
         setVideoState(UPLOAD_STATE.IDLE);
-        alert(`Video upload failed: ${err.message}`);
+        toast.error(copy.errors.videoUploadFailed.replace("{message}", err.message));
       } finally {
         setVideoProgress(0);
       }
     },
-    [apiKey],
+    [apiKey, copy],
   );
 
   const handlePromptInput = (e) => {
@@ -533,9 +706,11 @@ export default function LipSyncStudio({
   };
 
   const handleAudioPick = useCallback(
-    async (file) => {
+    async (files) => {
+      const file = Array.isArray(files) ? files[0] : files;
+      if (!file) return;
       if (file.size > 10 * 1024 * 1024) {
-        alert("Audio file exceeds 10MB limit.");
+        toast.error(copy.errors.audioTooLarge);
         return;
       }
       setAudioState(UPLOAD_STATE.UPLOADING);
@@ -549,24 +724,25 @@ export default function LipSyncStudio({
         setAudioState(UPLOAD_STATE.READY);
       } catch (err) {
         setAudioState(UPLOAD_STATE.IDLE);
-        alert(`Audio upload failed: ${err.message}`);
+        toast.error(copy.errors.audioUploadFailed.replace("{message}", err.message));
       } finally {
         setAudioProgress(0);
       }
     },
-    [apiKey],
+    [apiKey, copy],
   );
 
   // ── Handle Dropped Files ────────────────────────────────────────────────
   useEffect(() => {
     if (droppedFiles && droppedFiles.length > 0) {
-      const imageFiles = droppedFiles.filter(f => f.type.startsWith('image/'));
-      const videoFiles = droppedFiles.filter(f => f.type.startsWith('video/'));
-      const audioFiles = droppedFiles.filter(f => f.type.startsWith('audio/'));
+      const audioFiles = droppedFiles.filter(isAudioFile);
+      const videoFiles = droppedFiles.filter(isVideoFile);
+      const imageFiles = droppedFiles.filter(isImageFile);
       
       if (audioFiles.length > 0) {
         handleAudioPick(audioFiles[0]);
-      } else if (videoFiles.length > 0) {
+      }
+      if (videoFiles.length > 0) {
         switchToVideo();
         handleVideoPick(videoFiles[0]);
       } else if (imageFiles.length > 0) {
@@ -640,15 +816,15 @@ export default function LipSyncStudio({
   // ── Generation ──────────────────────────────────────────────────────────
   const handleGenerate = async () => {
     if (!audioUrl) {
-      alert("Please upload an audio file first.");
+      toast.error(copy.errors.needAudio);
       return;
     }
     if (inputMode === "image" && !imageUrl) {
-      alert("Please upload a portrait image first.");
+      toast.error(copy.errors.needImage);
       return;
     }
     if (inputMode === "video" && !videoUrl) {
-      alert("Please upload a source video first.");
+      toast.error(copy.errors.needVideo);
       return;
     }
 
@@ -696,7 +872,7 @@ export default function LipSyncStudio({
       }
     } catch (e) {
       console.error("[LipSyncStudio]", e);
-      const errMsg = formatErrorMessage(e, "Lip sync generation failed");
+      const errMsg = formatErrorMessage(e, copy.errors.generationFailed);
       if (onGenerationError) onGenerationError(errMsg);
       else toast.error(errMsg);
     } finally {
@@ -726,17 +902,17 @@ export default function LipSyncStudio({
     inputMode === "image"
       ? imageState === UPLOAD_STATE.READY
         ? `✓ ${imageName}`
-        : "No image"
+        : copy.media.noImage
       : videoState === UPLOAD_STATE.READY
         ? `✓ ${videoName}`
-        : "No video";
+        : copy.media.noVideo;
   const mediaStatusClass =
     (inputMode === "image" ? imageState : videoState) === UPLOAD_STATE.READY
       ? "text-primary"
       : "text-muted";
 
   const audioStatusText =
-    audioState === UPLOAD_STATE.READY ? `✓ ${audioName}` : "No audio";
+    audioState === UPLOAD_STATE.READY ? `✓ ${audioName}` : copy.media.noAudio;
   const audioStatusClass =
     audioState === UPLOAD_STATE.READY ? "text-primary" : "text-muted";
 
@@ -785,7 +961,7 @@ export default function LipSyncStudio({
                   />
                   <button
                     type="button"
-                    title="Download"
+                    title={copy.actions.download}
                     onClick={(e) => {
                       e.stopPropagation();
                       downloadFile(entry.url, `lipsync-${entry.id || idx}.mp4`);
@@ -798,10 +974,10 @@ export default function LipSyncStudio({
                   </button>
                   <button
                     type="button"
-                    title="Delete"
+                    title={copy.actions.delete}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (confirm("Are you sure you want to delete this generated item?")) {
+                      if (confirm(copy.confirm.deleteItem)) {
                         setInternalHistory(prev => prev.filter((_, i) => i !== idx));
                       }
                     }}
@@ -821,16 +997,16 @@ export default function LipSyncStudio({
                   actions={[
                     {
                       kind: "download",
-                      label: "Download",
+                      label: copy.actions.download,
                       onSelect: () =>
                         downloadFile(entry.url, `lipsync-${entry.id || idx}.mp4`),
                     },
                     {
                       kind: "delete",
-                      label: "Delete",
+                      label: copy.actions.delete,
                       danger: true,
                       onSelect: () => {
-                        if (confirm("Are you sure you want to delete this generated item?")) {
+                        if (confirm(copy.confirm.deleteItem)) {
                           setInternalHistory((prev) => prev.filter((_, i) => i !== idx));
                         }
                       },
@@ -848,7 +1024,7 @@ export default function LipSyncStudio({
                   <div className="flex items-center justify-between flex-wrap gap-1 mt-1">
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 whitespace-nowrap">
-                        Lip Sync
+                        {copy.badges.lipSync}
                       </span>
                       {entry.resolution && (
                         <span className="text-[10px] text-white/40">{entry.resolution}</span>
@@ -894,13 +1070,13 @@ export default function LipSyncStudio({
             </div>
 
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-center px-4 flex flex-col items-center">
-              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">START CREATING WITH</span>
+              <span className="text-white font-black uppercase text-xl sm:text-3xl tracking-wide mb-1 opacity-90">{copy.hero.titleLine1}</span>
               <span className="text-[#22d3ee] font-black uppercase text-2xl sm:text-4xl sm:mt-1 tracking-tight">
-                LIP SYNC STUDIO
+                {copy.hero.titleLine2}
               </span>
             </h1>
             <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide text-center max-w-lg leading-relaxed px-4">
-              Sync any voice with any face video to create premium talking avatars and videos.
+              {copy.hero.subtitle}
             </p>
           </div>
         )}
@@ -921,7 +1097,7 @@ export default function LipSyncStudio({
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <path d="m21 15-5-5L5 21" />
               </svg>
-              Portrait Image
+              {copy.modes.portraitImage}
             </PromptSegmentOption>
             <PromptSegmentOption
               type="button"
@@ -932,7 +1108,7 @@ export default function LipSyncStudio({
                 <rect x="2" y="5" width="15" height="14" rx="2" />
                 <path d="m17 10 5-3v10l-5-3" />
               </svg>
-              Video
+              {copy.modes.video}
             </PromptSegmentOption>
             </PromptSegmentedControl>
           </div>
@@ -944,7 +1120,8 @@ export default function LipSyncStudio({
               {inputMode === "image" && (
                 <MediaPickerButton
                   accept="image/*"
-                  label="Image"
+                  label={copy.media.imageLabel}
+                  mediaCopy={copy.media}
                   icon={
                     <svg
                       width="16"
@@ -979,7 +1156,8 @@ export default function LipSyncStudio({
               {inputMode === "video" && (
                 <MediaPickerButton
                   accept="video/*"
-                  label="Video"
+                  label={copy.media.videoLabel}
+                  mediaCopy={copy.media}
                   icon={
                     <VideoIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />
                   }
@@ -1001,7 +1179,8 @@ export default function LipSyncStudio({
               {/* Audio picker — always visible */}
               <MediaPickerButton
                 accept="audio/*"
-                label="Audio"
+                label={copy.media.audioLabel}
+                mediaCopy={copy.media}
                 icon={
                   <MicIcon className="text-white/40 group-hover:text-[#22d3ee] transition-colors" />
                 }
@@ -1014,7 +1193,8 @@ export default function LipSyncStudio({
                 uploadState={audioState}
                 progress={audioProgress}
                 fileName={audioName}
-                previewUrl={null}
+                previewUrl={audioUrl}
+                isAudio={true}
                 isVideo={false}
                 apiKey={apiKey}
               />
@@ -1026,7 +1206,7 @@ export default function LipSyncStudio({
                 ref={textareaRef}
                 value={prompt}
                 onChange={handlePromptInput}
-                placeholder="Describe speech style..."
+                placeholder={copy.prompt.placeholder}
               />
             </div>
           </div>
@@ -1055,13 +1235,13 @@ export default function LipSyncStudio({
                     </span>
                   </div>
                   <span className={PROMPT_CONTROL_LABEL_CLASS}>
-                    {selectedModel?.name ?? "Select model"}
+                    {selectedModel?.name ?? copy.model.selectModel}
                   </span>
                   <PromptChevronIcon />
                 </button>
                 <Dropdown
                   isOpen={openDropdown === "model"}
-                  title="Model"
+                  title={copy.model.dropdownTitle}
                   items={modelDropdownItems}
                   selectedId={selectedModelId}
                   onSelect={handleModelSelect}
@@ -1094,7 +1274,7 @@ export default function LipSyncStudio({
                   </button>
                   <Dropdown
                     isOpen={openDropdown === "resolution"}
-                    title="Resolution"
+                    title={copy.model.resolutionDropdownTitle}
                     items={resolutionDropdownItems}
                     selectedId={selectedResolution}
                     onSelect={(item) => setSelectedResolution(item.id)}
@@ -1115,11 +1295,11 @@ export default function LipSyncStudio({
                   <span className="animate-spin inline-block text-black">
                     ◌
                   </span>{" "}
-                  Generating...
+                  {copy.actions.generating}
                 </>
               ) : (
                 <>
-                  <span>Sync Lip</span>
+                  <span>{copy.actions.generate}</span>
                 </>
               )}
             </PromptAction>
